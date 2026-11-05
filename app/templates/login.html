@@ -18,6 +18,7 @@
     <input id="password" name="password" type="password" autocomplete="current-password" required>
 
     <button type="submit" class="btn btn-block">Se connecter</button>
+    {{ csrf_form.csrf_token }}
   </form>
 </section>
 {% endblock %}

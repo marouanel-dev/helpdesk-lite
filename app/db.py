@@ -1,8 +1,8 @@
 """Accès à la base SQLite."""
-import hashlib
 import sqlite3
 
 from flask import current_app, g
+from werkzeug.security import generate_password_hash
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (
@@ -43,7 +43,7 @@ def init_db():
     if admin_password:
         db.execute(
             "INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)",
-            ("admin", hashlib.md5(admin_password.encode()).hexdigest()),
+            ("admin", generate_password_hash(admin_password)),  # scrypt, salé
         )
     else:
         current_app.logger.warning("ADMIN_PASSWORD non défini : compte admin non créé.")

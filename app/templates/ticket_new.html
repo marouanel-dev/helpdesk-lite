@@ -27,6 +27,7 @@
       <a class="btn btn-ghost" href="{{ url_for('tickets.list_tickets') }}">Annuler</a>
       <button type="submit" class="btn">Créer le ticket</button>
     </div>
+    {{ csrf_form.csrf_token }}
   </form>
 </section>
 {% endblock %}

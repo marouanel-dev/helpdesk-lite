@@ -2,10 +2,19 @@
 import os
 
 from flask import Flask, redirect, url_for
+from flask_wtf import FlaskForm
+from flask_wtf.csrf import CSRFProtect
+
+csrf = CSRFProtect()
 
 
 def index():
     return redirect(url_for("tickets.list_tickets"))
+
+
+def inject_csrf_form():
+    # Formulaire vide qui fournit le jeton anti-CSRF aux templates
+    return {"csrf_form": FlaskForm()}
 
 
 def create_app(test_config=None):
@@ -24,6 +33,10 @@ def create_app(test_config=None):
         raise RuntimeError("La variable d'environnement SECRET_KEY doit être définie.")
 
     os.makedirs(app.instance_path, exist_ok=True)
+
+    # Protection CSRF : tout formulaire POST doit contenir un jeton valide
+    csrf.init_app(app)
+    app.context_processor(inject_csrf_form)
 
     from . import auth, db, tickets
 

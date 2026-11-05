@@ -12,7 +12,7 @@
 <div class="detail-grid">
   <section class="card">
     <h2>Description</h2>
-    <div class="description">{{ ticket['description'] | safe }}</div>
+    <div class="description">{{ ticket['description'] }}</div>
   </section>
 
   <aside class="card">
@@ -32,6 +32,7 @@
         {% endfor %}
       </select>
       <button type="submit" class="btn btn-block">Mettre à jour</button>
+      {{ csrf_form.csrf_token }}
     </form>
   </aside>
 </div>

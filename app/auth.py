@@ -1,8 +1,8 @@
 """Authentification : connexion, déconnexion, protection des pages."""
 import functools
-import hashlib
 
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
+from werkzeug.security import check_password_hash
 
 from .db import get_db
 
@@ -34,15 +34,13 @@ def login():
     if request.method == "POST":
         username = request.form.get("username", "")
         password = request.form.get("password", "")
-        password_hash = hashlib.md5(password.encode()).hexdigest()
 
-        query = (
-            f"SELECT * FROM users WHERE username = '{username}' "
-            f"AND password = '{password_hash}'"
-        )
-        user = get_db().execute(query).fetchone()
+        # Requête paramétrée : la saisie n'est jamais interprétée comme du SQL
+        user = get_db().execute(
+            "SELECT * FROM users WHERE username = ?", (username,)
+        ).fetchone()
 
-        if user is not None:
+        if user is not None and check_password_hash(user["password"], password):
             session.clear()
             session["user_id"] = user["id"]
             return redirect(url_for("tickets.list_tickets"))
