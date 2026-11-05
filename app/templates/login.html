@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Connexion{% endblock %}
+{% block main_class %}login-page{% endblock %}
+{% block content %}
+<section class="login-card">
+  <div class="login-brand">
+    <span class="brand-mark brand-mark-lg">HL</span>
+    <div>
+      <h1>HelpDesk Lite</h1>
+      <p class="muted">Portail du support informatique</p>
+    </div>
+  </div>
+  <form method="post" class="form">
+    <label for="username">Nom d'utilisateur</label>
+    <input id="username" name="username" type="text" autocomplete="username" required autofocus>
+
+    <label for="password">Mot de passe</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+    <button type="submit" class="btn btn-block">Se connecter</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Nouveau ticket{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <a class="back" href="{{ url_for('tickets.list_tickets') }}">← Retour aux tickets</a>
+    <h1>Nouveau ticket</h1>
+  </div>
+</div>
+
+<section class="card">
+  <form method="post" class="form">
+    <label for="title">Titre</label>
+    <input id="title" name="title" type="text" maxlength="120" value="{{ form['title'] }}" required>
+
+    <label for="priority">Priorité</label>
+    <select id="priority" name="priority">
+      {% for p in priorities %}
+      <option value="{{ p }}" {% if form['priority'] == p %}selected{% endif %}>{{ p }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="7" required>{{ form['description'] }}</textarea>
+
+    <div class="form-actions">
+      <a class="btn btn-ghost" href="{{ url_for('tickets.list_tickets') }}">Annuler</a>
+      <button type="submit" class="btn">Créer le ticket</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Tickets{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Tickets</h1>
+    <p class="muted">{{ counts.values() | sum }} ticket(s) au total</p>
+  </div>
+  <a class="btn" href="{{ url_for('tickets.create') }}">Nouveau ticket</a>
+</div>
+
+<nav class="filters">
+  <a class="chip {{ 'chip-active' if not current }}" href="{{ url_for('tickets.list_tickets') }}">
+    Tous <span class="chip-count">{{ counts.values() | sum }}</span>
+  </a>
+  {% for s in statuses %}
+  <a class="chip {{ 'chip-active' if current == s }}" href="{{ url_for('tickets.list_tickets', status=s) }}">
+    {{ s }} <span class="chip-count">{{ counts[s] }}</span>
+  </a>
+  {% endfor %}
+</nav>
+
+{% if tickets %}
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Titre</th>
+        <th>Priorité</th>
+        <th>Statut</th>
+        <th>Auteur</th>
+        <th>Créé le</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tickets %}
+      <tr>
+        <td class="mono">{{ t['id'] }}</td>
+        <td><a class="ticket-link" href="{{ url_for('tickets.detail', ticket_id=t['id']) }}">{{ t['title'] }}</a></td>
+        <td><span class="badge badge-{{ t['priority'] | css }}">{{ t['priority'] }}</span></td>
+        <td><span class="badge badge-{{ t['status'] | css }}">{{ t['status'] }}</span></td>
+        <td>{{ t['author'] }}</td>
+        <td class="muted mono">{{ t['created_at'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <p>Aucun ticket{{ ' avec le statut « ' ~ current ~ ' »' if current }}.</p>
+  <a class="btn btn-ghost" href="{{ url_for('tickets.create') }}">Créer le premier ticket</a>
+</div>
+{% endif %}
+{% endblock %}
