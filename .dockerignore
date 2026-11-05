@@ -1,0 +1,12 @@
+.git
+.github
+.zap
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+instance
+tests
+.env
+*.tar
