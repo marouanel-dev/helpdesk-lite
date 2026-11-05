@@ -39,10 +39,14 @@ def close_db(exception=None):
 def init_db():
     db = get_db()
     db.executescript(SCHEMA)
-    db.execute(
-        "INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)",
-        ("admin", hashlib.md5(b"admin123").hexdigest()),
-    )
+    admin_password = current_app.config.get("ADMIN_PASSWORD")
+    if admin_password:
+        db.execute(
+            "INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)",
+            ("admin", hashlib.md5(admin_password.encode()).hexdigest()),
+        )
+    else:
+        current_app.logger.warning("ADMIN_PASSWORD non défini : compte admin non créé.")
     db.commit()
 
 

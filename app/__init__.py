@@ -11,12 +11,17 @@ def index():
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
+    # Les secrets sont lus dans l'environnement, jamais écrits dans le code.
     app.config.from_mapping(
-        SECRET_KEY="7c1e9b4a2f8d6035e4b7a9c2d1f0e83b5a6c4d2e9f1b7a3c8d0e5f2a4b6c9d1e",
+        SECRET_KEY=os.environ.get("SECRET_KEY"),
+        ADMIN_PASSWORD=os.environ.get("ADMIN_PASSWORD"),
         DATABASE=os.path.join(app.instance_path, "helpdesk.db"),
     )
     if test_config:
         app.config.update(test_config)
+
+    if not app.config["SECRET_KEY"]:
+        raise RuntimeError("La variable d'environnement SECRET_KEY doit être définie.")
 
     os.makedirs(app.instance_path, exist_ok=True)
 

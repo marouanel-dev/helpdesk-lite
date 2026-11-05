@@ -47,6 +47,10 @@ python -m venv .venv
 source .venv/bin/activate        # Windows : .venv\Scripts\activate
 pip install -r requirements-dev.txt
 pytest                           # tests
+
+# Secrets (voir .env.example). Windows PowerShell : $env:SECRET_KEY="..."
+export SECRET_KEY=$(python -c "import secrets; print(secrets.token_hex(32))")
+export ADMIN_PASSWORD=<mot de passe>
 python run.py                    # http://127.0.0.1:8000
 ```
 
